@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -20,8 +21,7 @@ header{position:sticky;top:0;z-index:20;height:56px;display:flex;align-items:cen
 .icon-btn{width:40px;height:40px;border-radius:50%;display:grid;place-items:center}
 .icon-btn:hover{background:var(--bg2)}
 .logo{display:flex;align-items:center;gap:4px;font-weight:700;font-size:20px;letter-spacing:-1px;padding-left:8px}
-.logo .mark{width:30px;height:21px;background:var(--red);border-radius:6px;display:grid;place-items:center}
-.logo .mark:after{content:"";border-left:9px solid #fff;border-top:5.5px solid transparent;border-bottom:5.5px solid transparent;margin-left:2px}
+.logo .logo-mark{width:32px;height:23px;color:var(--red);flex-shrink:0}
 form.search{flex:0 1 640px;display:flex;margin:0 24px}
 form.search input{flex:1;height:40px;background:#121212;border:1px solid var(--line);border-right:0;border-radius:40px 0 0 40px;padding:0 16px;color:var(--fg);font-size:16px;outline:none}
 form.search input:focus{border-color:#1c62b9}
@@ -96,21 +96,29 @@ main{flex:1;min-width:0;padding:0 24px 40px}
 .rel .sub{font-size:12px;line-height:18px;margin-top:2px}
 @media(max-width:1000px){.watch{flex-direction:column}.secondary{width:100%}}
 @media(max-width:800px){aside{display:none}main{padding:0 12px 40px}.left,.right{min-width:0}.logo span{display:none}form.search{margin:0 8px}.row{flex-direction:column}.row .thumb{width:100%}}
-.ch-row{display:flex;gap:16px;align-items:center;cursor:pointer;padding:8px 0}
+.ch-row{display:flex;gap:16px;align-items:center;cursor:pointer;padding:14px 0;max-width:1100px;min-height:144px}
+.ch-row:hover h3{text-decoration:underline}
+.ch-row-info{min-width:0;flex:1}
+.ch-row .ch-pic{margin:0 120px}
+.ch-row .sub{line-height:20px}
+.ch-description{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;max-width:640px}
+.ch-results{padding-top:16px}
+.ch-results .ch-row{border-bottom:1px solid var(--line)}
 .ch-row .ch-pic{width:120px;height:120px;border-radius:50%;background:var(--bg2);object-fit:cover;flex-shrink:0;display:grid;place-items:center;font-size:40px;font-weight:500}
 .ch-row h3{font-size:18px;font-weight:500}
 .sec-title{font-size:16px;color:var(--muted);margin:16px 0 4px}
 .divider{border:0;border-top:1px solid var(--line);margin:8px 0}
 #sentinel{height:1px}
 .loadmore{width:100%;display:grid;place-items:center;padding:24px}
-@media(max-width:800px){.ch-row .ch-pic{width:80px;height:80px;font-size:28px}}
+@media(max-width:800px){.ch-row{min-height:104px}.ch-row .ch-pic{width:80px;height:80px;font-size:28px;margin:0 8px}.ch-row .sub{font-size:12px}}
+@media(max-width:600px){header{padding:0 8px;gap:4px}.left{gap:0}.left .icon-btn{width:36px;flex-shrink:0}.logo{display:none}.right{display:none}form.search{min-width:0;margin:0 4px}form.search input{min-width:0}form.search button{width:48px;flex-shrink:0}}
 </style>
 </head>
 <body>
 <header>
   <div class="left">
     <button class="icon-btn" onclick="document.querySelector('aside').style.display=document.querySelector('aside').style.display==='none'?'':'none'"><svg viewBox="0 0 24 24"><path d="M21 6H3V5h18v1zm0 5H3v1h18v-1zm0 6H3v1h18v-1z"/></svg></button>
-    <a href="#/" class="logo"><div class="mark"></div><span>くかぁw</span></a>
+    <a href="#/" class="logo"><svg class="logo-mark" viewBox="0 0 90 64" aria-hidden="true"><path fill="currentColor" d="M88.1 10.1a11.3 11.3 0 0 0-8-8C73.1.2 45 .2 45 .2S16.9.2 9.9 2.1a11.3 11.3 0 0 0-8 8C0 17.1 0 32 0 32s0 14.9 1.9 21.9a11.3 11.3 0 0 0 8 8C16.9 63.8 45 63.8 45 63.8s28.1 0 35.1-1.9a11.3 11.3 0 0 0 8-8C90 46.9 90 32 90 32s0-14.9-1.9-21.9Z"/><path fill="var(--bg)" d="m36 45.5 24-13.5L36 18.5v27Z"/></svg><span>くかぁw</span></a>
   </div>
   <form class="search" id="searchForm">
     <input id="q" placeholder="検索" autocomplete="off">
@@ -151,7 +159,8 @@ function norm(item) {
     views: item.viewCount || item.views || 0,
     published: item.publishedText || item.uploadedDate || '',
     duration: fmtDur(item.lengthSeconds || item.duration),
-    thumbnail: `https://i.ytimg.com/vi/${id}/hqdefault.jpg`
+    thumbnail: item.thumbnail || item.videoThumbnails?.[0]?.url || `https://i.ytimg.com/vi/${id}/hqdefault.jpg`,
+    channelThumb: item.authorThumbnails?.[0]?.url || ''
   };
 }
 
@@ -190,12 +199,33 @@ async function fetchPage(path, cont) {
   const raw = pickList(data);
   const videos = raw.filter(i => !i.type || i.type === 'video' || i.type === 'stream').map(norm).filter(v => v.id);
   const channels = raw.filter(i => i.type === 'channel').map(normChannel).filter(c => c.id);
+  // Some search providers return only videos. Surface the matching creators as
+  // channel results too, rather than hiding the entire channel section.
+  if (path.startsWith('/search') && !cont && !channels.length) {
+    const query = new URL(path, location.origin).searchParams.get('q')?.trim().toLocaleLowerCase() || '';
+    const candidates = new Map();
+    for (const item of raw) {
+      const id = item.authorId || item.channelId;
+      if (!id || candidates.has(id)) continue;
+      const name = item.author || item.uploaderName || '';
+      candidates.set(id, { id, name, thumb: item.authorThumbnails?.[0]?.url || '', subs: null, videoCount: null, description: '' });
+    }
+    const matches = [...candidates.values()].filter(c => c.name.toLocaleLowerCase().includes(query));
+    const selected = (matches.length ? matches : [...candidates.values()].slice(0, 1)).slice(0, 3);
+    const enriched = await Promise.all(selected.map(async c => {
+      try {
+        const detail = await api('/channels/' + encodeURIComponent(c.id));
+        return { ...c, ...normChannel(detail), id: c.id };
+      } catch { return c; }
+    }));
+    channels.push(...enriched);
+  }
   return { videos, channels, cont: pickCont(data) };
 }
 
 // Generic infinite scroll controller
 function makeFeed({ path, container, sentinel, renderVideos, renderChannels, emptyText }) {
-  let cont = null, loading = false, done = false, first = true, seen = new Set();
+  let cont = null, loading = false, done = false, first = true, seen = new Set(), seenChannels = new Set();
   let curPath = path;
   const spin = () => { sentinel.innerHTML = '<div class="spinner" style="margin:24px auto"></div>'; };
   const clearSpin = () => { sentinel.innerHTML = ''; };
@@ -207,7 +237,11 @@ function makeFeed({ path, container, sentinel, renderVideos, renderChannels, emp
       const page = await fetchPage(curPath, cont);
       const fresh = page.videos.filter(v => !seen.has(v.id));
       fresh.forEach(v => seen.add(v.id));
-      if (first && page.channels.length && renderChannels) renderChannels(page.channels);
+      if (renderChannels && page.channels.length) {
+        const freshChannels = page.channels.filter(c => !seenChannels.has(c.id));
+        freshChannels.forEach(c => seenChannels.add(c.id));
+        if (freshChannels.length) renderChannels(freshChannels);
+      }
       if (fresh.length) renderVideos(fresh);
       cont = page.cont;
       // /trending は continuation を返さないため、検索APIに切り替えて続きを読み込む
@@ -302,12 +336,12 @@ const rel = v => `
   </div>`;
 
 const chRow = c => `
-  <div class="ch-row" onclick="location.hash='#/channel?id=${c.id}'">
+  <div class="ch-row" onclick="location.hash='#/channel?id=${encodeURIComponent(c.id)}'">
     ${c.thumb ? `<img class="ch-pic" src="${esc(c.thumb)}" alt="" loading="lazy">` : `<div class="ch-pic">${esc((c.name||'?')[0])}</div>`}
-    <div>
+    <div class="ch-row-info">
       <h3>${esc(c.name)}</h3>
       <div class="sub">${c.subs != null ? 'チャンネル登録者数 ' + fmtViews(c.subs) + '人' : ''}${c.videoCount != null ? ' • ' + fmtViews(c.videoCount) + ' 本の動画' : ''}</div>
-      ${c.description ? `<div class="sub" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;max-width:640px">${esc(c.description)}</div>` : ''}
+      ${c.description ? `<div class="sub ch-description">${esc(c.description)}</div>` : ''}
     </div>
   </div>`;
 
@@ -317,13 +351,18 @@ function renderResults(q) {
   view.innerHTML = `<div id="chBox"></div><div class="list" id="resList"></div><div id="sentinel"></div>`;
   const list = document.getElementById('resList');
   const chBox = document.getElementById('chBox');
+  const shownChannels = new Set();
   makeFeed({
     path: '/search?q=' + encodeURIComponent(q),
     container: view,
     sentinel: document.getElementById('sentinel'),
     renderVideos: vs => list.insertAdjacentHTML('beforeend', vs.map(row).join('')),
     renderChannels: cs => {
-      chBox.innerHTML = `<div class="list" style="padding-top:16px">${cs.map(chRow).join('')}</div><hr class="divider">`;
+      const fresh = cs.filter(c => !shownChannels.has(c.id));
+      fresh.forEach(c => shownChannels.add(c.id));
+      if (!fresh.length) return;
+      if (!chBox.firstElementChild) chBox.innerHTML = '<div class="ch-results"></div>';
+      chBox.firstElementChild.insertAdjacentHTML('beforeend', fresh.map(chRow).join(''));
     },
     emptyText: `「${esc(q)}」の検索結果はありません`
   });
