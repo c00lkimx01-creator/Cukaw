@@ -1,17 +1,15 @@
-
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>くかぁw</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<title>くかぁwTube</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#0f0f0f;--bg2:#272727;--bg3:#3f3f3f;--fg:#f1f1f1;--muted:#aaa;--red:#ff0033;--line:#303030}
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--fg);font-family:Roboto,"Noto Sans JP",Arial,sans-serif;font-size:14px}
+body{background:var(--bg);color:var(--fg);font-family:Roboto,"Noto Sans JP",Arial,sans-serif;font-size:14px;padding-top:env(safe-area-inset-top,0);padding-bottom:env(safe-area-inset-bottom,0)}
 a{color:inherit;text-decoration:none}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 svg{width:24px;height:24px;fill:currentColor}
@@ -21,43 +19,53 @@ header{position:sticky;top:0;z-index:20;height:56px;display:flex;align-items:cen
 .icon-btn{width:40px;height:40px;border-radius:50%;display:grid;place-items:center}
 .icon-btn:hover{background:var(--bg2)}
 .logo{display:flex;align-items:center;gap:4px;font-weight:700;font-size:20px;letter-spacing:-1px;padding-left:8px}
-.logo .logo-mark{width:32px;height:23px;color:var(--red);flex-shrink:0}
+.logo .mark{width:30px;height:21px;background:var(--red);border-radius:6px;display:grid;place-items:center}
+.logo .mark:after{content:"";border-left:9px solid #fff;border-top:5.5px solid transparent;border-bottom:5.5px solid transparent;margin-left:2px}
 form.search{flex:0 1 640px;display:flex;margin:0 24px}
 form.search input{flex:1;height:40px;background:#121212;border:1px solid var(--line);border-right:0;border-radius:40px 0 0 40px;padding:0 16px;color:var(--fg);font-size:16px;outline:none}
 form.search input:focus{border-color:#1c62b9}
-form.search button{width:64px;height:40px;background:#222;border:1px solid var(--line);border-radius:0 40px 40px 0}
-.avatar{width:32px;height:32px;border-radius:50%;background:#7b3fe4;display:grid;place-items:center;font-weight:500}
+form.search button{width:64px;height:40px;background:#222;border:1px solid var(--line);border-radius:0 40px 40px 0;cursor:pointer}
+.avatar{width:32px;height:32px;border-radius:50%;background:#7b3fe4;display:grid;place-items:center;font-weight:500;cursor:pointer}
 .layout{display:flex}
 aside{width:240px;flex-shrink:0;padding:12px;position:sticky;top:56px;height:calc(100vh - 56px);overflow-y:auto}
-aside a{display:flex;align-items:center;gap:24px;height:40px;padding:0 12px;border-radius:10px}
+aside a{display:flex;align-items:center;gap:24px;height:40px;padding:0 12px;border-radius:10px;cursor:pointer}
 aside a:hover{background:var(--bg2)}
 aside a.active{background:var(--bg2);font-weight:500}
 aside hr{border:0;border-top:1px solid var(--line);margin:12px 0}
 aside h4{padding:6px 12px;font-size:16px;font-weight:500}
 main{flex:1;min-width:0;padding:0 24px 40px}
 .chips{display:flex;gap:12px;padding:12px 0;overflow-x:auto;position:sticky;top:56px;background:var(--bg);z-index:5}
-.chip{background:var(--bg2);padding:6px 12px;border-radius:8px;white-space:nowrap;font-weight:500}
+.chip{background:var(--bg2);padding:6px 12px;border-radius:8px;white-space:nowrap;font-weight:500;cursor:pointer}
 .chip.active{background:var(--fg);color:#0f0f0f}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:40px 16px;padding-top:12px}
-.card{cursor:pointer}
+.search-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:40px 16px;padding-top:12px}
+.short-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;padding-top:12px}
+.card{cursor:pointer;position:relative}
+.search-card{cursor:pointer;position:relative}
+.short-card{cursor:pointer;position:relative}
 .thumb{position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:var(--bg2)}
+.short-card .thumb{aspect-ratio:9/16;border-radius:12px}
 .thumb img{width:100%;height:100%;object-fit:cover;transition:transform .2s}
-.card:hover .thumb img{transform:scale(1.03)}
+.card:hover .thumb img,.search-card:hover .thumb img{transform:scale(1.03)}
 .dur{position:absolute;right:6px;bottom:6px;background:rgba(0,0,0,.8);font-size:12px;font-weight:500;padding:1px 4px;border-radius:4px}
+.card-action{position:absolute;right:8px;top:8px;width:36px;height:36px;background:rgba(0,0,0,.7);border-radius:8px;display:grid;place-items:center;opacity:0;transition:opacity .2s;cursor:pointer}
+.card:hover .card-action,.search-card:hover .card-action{opacity:1}
+.card-action:hover{background:rgba(0,0,0,.9)}
 .meta{display:flex;gap:12px;margin-top:12px}
-.ch-av{width:36px;height:36px;border-radius:50%;background:var(--bg3);flex-shrink:0;display:grid;place-items:center;font-weight:500}
+.short-meta{display:flex;gap:8px;margin-top:8px;font-size:12px}
+.ch-av{width:36px;height:36px;border-radius:50%;background:var(--bg3);flex-shrink:0;display:grid;place-items:center;font-weight:500;font-size:12px}
 .title{font-size:16px;font-weight:500;line-height:22px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.short-title{font-size:13px;font-weight:500;line-height:18px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .sub{color:var(--muted);font-size:14px;margin-top:4px;line-height:20px}
+.short-sub{color:var(--muted);font-size:12px;margin-top:2px}
 .sub a:hover{color:var(--fg)}
 .status{padding:60px;text-align:center;color:var(--muted)}
 .spinner{width:36px;height:36px;border:3px solid var(--bg3);border-top-color:var(--fg);border-radius:50%;animation:spin 1s linear infinite;margin:60px auto}
 @keyframes spin{to{transform:rotate(360deg)}}
-/* list (search results) */
 .list{display:flex;flex-direction:column;gap:16px;max-width:1100px;padding-top:16px}
 .row{display:flex;gap:16px;cursor:pointer}
 .row .thumb{width:360px;flex-shrink:0}
 .row .title{font-size:18px;line-height:26px}
-/* watch */
 .watch{display:flex;gap:24px;padding:24px 0;max-width:1750px;margin:0 auto}
 .primary{flex:1;min-width:0}
 .player{aspect-ratio:16/9;background:#000;border-radius:12px;overflow:hidden}
@@ -65,10 +73,10 @@ main{flex:1;min-width:0;padding:0 24px 40px}
 .w-title{font-size:20px;font-weight:700;margin:12px 0 8px;line-height:28px}
 .owner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
 .owner-l{display:flex;align-items:center;gap:12px}
-.owner-l .ch-av{width:40px;height:40px}
-.subscribe{background:var(--fg);color:#0f0f0f;padding:0 16px;height:36px;border-radius:18px;font-weight:500}
+.owner-l .ch-av{width:40px;height:40px;font-size:16px}
+.subscribe{background:var(--fg);color:#0f0f0f;padding:0 16px;height:36px;border-radius:18px;font-weight:500;cursor:pointer}
 .subscribe.on{background:var(--bg2);color:var(--fg)}
-.pill{background:var(--bg2);height:36px;padding:0 16px;border-radius:18px;display:inline-flex;align-items:center;gap:6px;font-weight:500}
+.pill{background:var(--bg2);height:36px;padding:0 16px;border-radius:18px;display:inline-flex;align-items:center;gap:6px;font-weight:500;cursor:pointer}
 .pill:hover{background:var(--bg3)}
 .desc{background:var(--bg2);border-radius:12px;padding:12px;margin-top:12px;cursor:pointer}
 .desc p{white-space:pre-wrap;line-height:20px;max-height:60px;overflow:hidden;margin-top:4px}
@@ -80,57 +88,138 @@ main{flex:1;min-width:0;padding:0 24px 40px}
 .cm span{color:var(--muted);font-size:12px;margin-left:4px}
 .cm p{margin-top:4px;line-height:20px;white-space:pre-wrap;word-break:break-word}
 .secondary{width:402px;flex-shrink:0}
-/* channel */
 .ch-banner{width:100%;aspect-ratio:6/1;object-fit:cover;border-radius:12px;background:var(--bg2)}
 .ch-head{display:flex;gap:24px;padding:24px 0 12px;align-items:center;flex-wrap:wrap}
 .ch-head img{width:128px;height:128px;border-radius:50%;background:var(--bg2)}
 .ch-head h1{font-size:28px;font-weight:700}
 .ch-tabs{display:flex;gap:24px;border-bottom:1px solid var(--line);margin-bottom:16px}
-.ch-tabs button{padding:12px 4px;color:var(--muted);font-weight:500;border-bottom:2px solid transparent}
+.ch-tabs button{padding:12px 4px;color:var(--muted);font-weight:500;border-bottom:2px solid transparent;cursor:pointer}
 .ch-tabs button.active{color:var(--fg);border-bottom-color:var(--fg)}
 .ch-sorts{display:flex;gap:8px;padding:12px 0}
-@media(max-width:800px){.ch-head img{width:80px;height:80px}.ch-head h1{font-size:22px}}
 .rel{display:flex;gap:8px;margin-bottom:8px;cursor:pointer}
 .rel .thumb{width:168px;flex-shrink:0;border-radius:8px}
 .rel .title{font-size:14px;line-height:20px}
 .rel .sub{font-size:12px;line-height:18px;margin-top:2px}
-@media(max-width:1000px){.watch{flex-direction:column}.secondary{width:100%}}
-@media(max-width:800px){aside{display:none}main{padding:0 12px 40px}.left,.right{min-width:0}.logo span{display:none}form.search{margin:0 8px}.row{flex-direction:column}.row .thumb{width:100%}}
-.ch-row{display:flex;gap:16px;align-items:center;cursor:pointer;padding:14px 0;max-width:1100px;min-height:144px}
-.ch-row:hover h3{text-decoration:underline}
-.ch-row-info{min-width:0;flex:1}
-.ch-row .ch-pic{margin:0 120px}
-.ch-row .sub{line-height:20px}
-.ch-description{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;max-width:640px}
-.ch-results{padding-top:16px}
-.ch-results .ch-row{border-bottom:1px solid var(--line)}
+.ch-row{display:flex;gap:16px;align-items:center;cursor:pointer;padding:8px 0}
 .ch-row .ch-pic{width:120px;height:120px;border-radius:50%;background:var(--bg2);object-fit:cover;flex-shrink:0;display:grid;place-items:center;font-size:40px;font-weight:500}
 .ch-row h3{font-size:18px;font-weight:500}
 .sec-title{font-size:16px;color:var(--muted);margin:16px 0 4px}
 .divider{border:0;border-top:1px solid var(--line);margin:8px 0}
 #sentinel{height:1px}
-.loadmore{width:100%;display:grid;place-items:center;padding:24px}
-@media(max-width:800px){.ch-row{min-height:104px}.ch-row .ch-pic{width:80px;height:80px;font-size:28px;margin:0 8px}.ch-row .sub{font-size:12px}}
-@media(max-width:600px){header{padding:0 8px;gap:4px}.left{gap:0}.left .icon-btn{width:36px;flex-shrink:0}.logo{display:none}.right{display:none}form.search{min-width:0;margin:0 4px}form.search input{min-width:0}form.search button{width:48px;flex-shrink:0}}
+.modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);z-index:100;display:flex;align-items:center;justify-content:center}
+.modal-content{background:var(--bg2);border-radius:12px;padding:24px;max-width:500px;width:90%;max-height:80vh;overflow-y:auto}
+.modal-content h2{margin-bottom:16px}
+.modal-content input,.modal-content select{width:100%;padding:8px;margin:8px 0;background:var(--bg3);border:1px solid var(--line);border-radius:6px;color:var(--fg);font-family:inherit}
+.modal-close{position:absolute;top:16px;right:16px;width:32px;height:32px;display:grid;place-items:center;cursor:pointer;background:var(--bg3);border-radius:50%}
+.modal-actions{display:flex;gap:8px;margin-top:16px;justify-content:flex-end}
+.modal-actions button{padding:8px 16px;background:var(--fg);color:#0f0f0f;border-radius:6px;cursor:pointer;font-weight:500}
+.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+.setting-item{display:flex;flex-direction:column;gap:8px}
+.setting-item label{font-weight:500}
+.setting-item input[type="range"]{cursor:pointer}
+.color-picker{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin:8px 0}
+.color-option{width:100%;aspect-ratio:1;border-radius:8px;cursor:pointer;border:2px solid transparent;display:grid;place-items:center}
+.color-option.active{border-color:var(--fg)}
+.player-controls{background:var(--bg2);border-radius:8px;padding:12px;margin-top:12px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.player-control{display:flex;align-items:center;gap:8px}
+.player-control label{font-size:12px;font-weight:500}
+.player-control input[type="range"]{width:100px}
+.player-control select{background:var(--bg3);border:1px solid var(--line);border-radius:4px;padding:4px;color:var(--fg);cursor:pointer}
+.search-section{margin-bottom:32px}
+.search-section h3{font-size:18px;font-weight:600;margin:16px 0 12px;color:var(--fg)}
+.channel-card{background:var(--bg2);border-radius:12px;padding:12px;display:flex;gap:12px;cursor:pointer}
+.channel-card:hover{background:var(--bg3)}
+.channel-card .ch-pic{width:80px;height:80px;border-radius:50%;flex-shrink:0}
+.channel-card-info{flex:1}
+.channel-card-info h4{font-size:14px;font-weight:600;margin-bottom:4px}
+.channel-card-info .sub{font-size:12px}
+@media(max-width:1000px){.watch{flex-direction:column}.secondary{width:100%}}
+@media(max-width:800px){aside{display:none}main{padding:0 12px 40px}.left,.right{min-width:0}.logo span{display:none}form.search{margin:0 8px}.search-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}.settings-grid{grid-template-columns:1fr}.player-controls{flex-direction:column}}
+/* iPhone用UI */
+@media(max-width:480px){
+  html{padding-top:env(safe-area-inset-top,0);padding-bottom:env(safe-area-inset-bottom,0)}
+  body{overflow-x:hidden}
+  header{height:48px;padding:0 8px;gap:4px}
+  .left,.right{gap:4px;min-width:auto}
+  .logo{font-size:16px}
+  .logo .mark{width:24px;height:18px}
+  form.search{margin:0 4px;flex:0 1 100%}
+  form.search input{font-size:14px;height:36px}
+  form.search button{width:56px;height:36px}
+  .icon-btn{width:36px;height:36px}
+  aside{width:100%;height:auto;position:static;padding:8px;flex-wrap:wrap;overflow-x:auto;border-bottom:1px solid var(--line)}
+  aside a{height:36px;gap:12px;font-size:12px;padding:0 8px}
+  aside hr{display:none}
+  aside h4{display:none}
+  .layout{flex-direction:column}
+  main{padding:0 8px 24px}
+  .chips{margin:0 -8px;padding:8px;overflow-x:auto}
+  .chip{padding:4px 10px;font-size:12px}
+  .grid,.search-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:20px 8px}
+  .short-grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px}
+  .card{gap:0}
+  .meta{gap:8px;margin-top:8px}
+  .ch-av{width:28px;height:28px;font-size:10px}
+  .title{font-size:13px;line-height:18px}
+  .short-title{font-size:12px}
+  .sub{font-size:12px;margin-top:2px}
+  .short-sub{font-size:11px}
+  .search-section h3{font-size:16px;margin:12px 0 8px}
+  .channel-card{padding:8px;gap:8px}
+  .channel-card .ch-pic{width:60px;height:60px}
+  .channel-card-info h4{font-size:12px}
+  .channel-card-info .sub{font-size:11px}
+  .row{gap:8px;flex-direction:column}
+  .row .thumb{width:100%;aspect-ratio:16/9}
+  .row .title{font-size:14px}
+  .watch{gap:12px;padding:12px 0}
+  .primary{gap:8px}
+  .player{aspect-ratio:16/9}
+  .player-controls{padding:8px;gap:8px;font-size:12px}
+  .player-control{gap:6px}
+  .player-control input[type="range"]{width:80px}
+  .player-control label{font-size:11px}
+  .pill{height:32px;padding:0 12px;font-size:12px;gap:4px}
+  .pill svg{width:16px;height:16px}
+  .subscribe{height:32px;padding:0 12px;font-size:12px}
+  .w-title{font-size:16px;margin:8px 0 4px}
+  .owner{gap:8px;flex-direction:column}
+  .owner-l{gap:8px}
+  .owner-l .ch-av{width:32px;height:32px}
+  .modal-content{max-width:90vw;padding:16px;border-radius:8px}
+  .modal-close{width:28px;height:28px;top:8px;right:8px}
+  .modal-content h2{font-size:16px;margin-bottom:12px}
+  .modal-content input,.modal-content select{padding:6px;font-size:14px}
+  .settings-grid{grid-template-columns:1fr;gap:12px;margin:12px 0}
+  .setting-item label{font-size:13px}
+  .color-picker{grid-template-columns:repeat(4,1fr);gap:6px}
+  .color-option{width:100%;aspect-ratio:1}
+}
 </style>
 </head>
 <body>
 <header>
   <div class="left">
     <button class="icon-btn" onclick="document.querySelector('aside').style.display=document.querySelector('aside').style.display==='none'?'':'none'"><svg viewBox="0 0 24 24"><path d="M21 6H3V5h18v1zm0 5H3v1h18v-1zm0 6H3v1h18v-1z"/></svg></button>
-    <a href="#/" class="logo"><svg class="logo-mark" viewBox="0 0 90 64" aria-hidden="true"><path fill="currentColor" d="M88.1 10.1a11.3 11.3 0 0 0-8-8C73.1.2 45 .2 45 .2S16.9.2 9.9 2.1a11.3 11.3 0 0 0-8 8C0 17.1 0 32 0 32s0 14.9 1.9 21.9a11.3 11.3 0 0 0 8 8C16.9 63.8 45 63.8 45 63.8s28.1 0 35.1-1.9a11.3 11.3 0 0 0 8-8C90 46.9 90 32 90 32s0-14.9-1.9-21.9Z"/><path fill="var(--bg)" d="m36 45.5 24-13.5L36 18.5v27Z"/></svg><span>くかぁw</span></a>
+    <a href="#/" class="logo"><div class="mark"></div><span>くかぁwTube</span></a>
   </div>
   <form class="search" id="searchForm">
     <input id="q" placeholder="検索" autocomplete="off">
     <button type="submit" title="検索"><svg viewBox="0 0 24 24"><path d="m20.87 20.17-5.59-5.59C16.35 13.35 17 11.75 17 10c0-3.87-3.13-7-7-7s-7 3.13-7 7 3.13 7 7 7c1.75 0 3.35-.65 4.58-1.71l5.59 5.59.7-.71zM10 16c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/></svg></button>
   </form>
-  <div class="right"><div class="avatar">C</div></div>
+  <div class="right">
+    <button class="icon-btn" onclick="openSettingsModal()" title="設定"><svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l1.72-1.35c.15-.12.19-.34.1-.51l-1.63-2.83c-.12-.22-.37-.29-.59-.22l-2.03.81c-.42-.32-.9-.6-1.44-.78l-.3-2.16c-.04-.24-.24-.41-.48-.41h-3.26c-.24 0-.43.17-.47.41l-.3 2.16c-.54.18-1.02.46-1.44.78l-2.03-.81c-.22-.09-.47 0-.59.22L2.74 8.87c-.1.16-.06.39.1.51l1.72 1.35c-.05.3-.07.62-.07.94s.02.64.07.94l-1.72 1.35c-.15.12-.19.34-.1.51l1.63 2.83c.12.22.37.29.59.22l2.03-.81c.42.32.9.6 1.44.78l.3 2.16c.05.24.24.41.48.41h3.26c.24 0 .43-.17.47-.41l.3-2.16c.54-.18 1.02-.46 1.44-.78l2.03.81c.22.09.47 0 .59-.22l1.63-2.83c.1-.16.06-.39-.1-.51l-1.72-1.35zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg></button>
+    <div class="avatar" onclick="openSettingsModal()">C</div>
+  </div>
 </header>
 <div class="layout">
   <aside>
     <a href="#/" data-nav="home"><svg viewBox="0 0 24 24"><path d="M4 10v11h6v-7h4v7h6V10l-8-7z"/></svg>ホーム</a>
     <a href="#/history" data-nav="history"><svg viewBox="0 0 24 24"><path d="M14.97 16.95 10 13.87V7h2v5.76l4.03 2.49-1.06 1.7zM12 3c-4.96 0-9 4.04-9 9s4.04 9 9 9 9-4.04 9-9-4.04-9-9-9m0-1c5.52 0 10 4.48 10 10s-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2z"/></svg>履歴</a>
-    <a href="#/subs" data-nav="subs"><svg viewBox="0 0 24 24"><path d="M20 8H4V6h16v2zm-2-6H6v2h12V2zm4 10v8c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2v-8c0-1.1.9-2 2-2h16c1.1 0 2 .9 2 2zm-6 4-6-3.27v6.53L16 16z"/></svg>登録チャンネル</a>
+    <a href="#/favorites" data-nav="favorites"><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>お気に入り</a>
+    <a href="#/watchlater" data-nav="watchlater"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-5.04-6.71l2.75 3.54 4.96-6.63c.37-.5.09-1.24-.57-1.24-.37 0-.74.2-.95.52L10.5 11.35 8.54 9.03c-.21-.31-.58-.52-.95-.52-.66 0-.94.75-.57 1.24z"/></svg>後で見る</a>
+    <a href="#/playlists" data-nav="playlists"><svg viewBox="0 0 24 24"><path d="M15 6H3v2h12V6zm0 4H3v2h12v-2zM3 16h8v-2H3v2zM17 6v8.18c-.31-.11-.65-.18-1-.18-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3V8h3V6h-5z"/></svg>プレイリスト</a>
+    <a href="#/subs" data-nav="subs"><svg viewBox="0 0 24 24"><path d="M20 8H4V6h16v2zm-2-6H6v2h12V2zm4 10v8c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2v-8c0-1.1.9-2 2-2h16c1.1 0 2 .9 2 2zm-6 4l-6-3.27v6.53L16 16z"/></svg>登録チャンネル</a>
     <hr><h4>探索</h4>
     <a href="#/results?q=音楽"><svg viewBox="0 0 24 24"><path d="M12 4v9.38c-.73-.84-1.8-1.38-3-1.38-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V8h6V4h-7z"/></svg>音楽</a>
     <a href="#/results?q=ゲーム実況"><svg viewBox="0 0 24 24"><path d="M10 12H8v2H6v-2H4v-2h2V8h2v2h2v2zm7 .5c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5.67 1.5 1.5 1.5 1.5-.67 1.5-1.5zm3-3c0-.83-.67-1.5-1.5-1.5S17 8.67 17 9.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5zM22 6v12H2V6h20z"/></svg>ゲーム</a>
@@ -140,27 +229,209 @@ main{flex:1;min-width:0;padding:0 24px 40px}
   <main id="view"></main>
 </div>
 
+<!-- Settings Modal -->
+<div id="settingsModal" class="modal" style="display:none">
+  <div class="modal-content">
+    <div class="modal-close" onclick="closeSettingsModal()">✕</div>
+    <h2>設定</h2>
+    
+    <h3 style="font-size:16px;margin:20px 0 8px;color:var(--muted)">テーマ</h3>
+    <div class="settings-grid">
+      <div class="setting-item">
+        <label>テーマモード</label>
+        <select id="themeMode" onchange="changeTheme()">
+          <option value="dark">ダーク</option>
+          <option value="light">ライト</option>
+        </select>
+      </div>
+    </div>
+    
+    <h3 style="font-size:16px;margin:20px 0 8px;color:var(--muted)">カラーカスタマイズ</h3>
+    <div class="color-picker" id="colorPicker"></div>
+    
+    <h3 style="font-size:16px;margin:20px 0 8px;color:var(--muted)">動画プレイヤー設定</h3>
+    <div class="setting-item">
+      <label>デフォルト再生速度</label>
+      <select id="playSpeed">
+        <option value="0.75">0.75x</option>
+        <option value="1" selected>1x</option>
+        <option value="1.25">1.25x</option>
+        <option value="1.5">1.5x</option>
+        <option value="2">2x</option>
+      </select>
+    </div>
+    
+    <h3 style="font-size:16px;margin:20px 0 8px;color:var(--muted)">その他</h3>
+    <div class="setting-item">
+      <button onclick="clearAllData()" style="background:#ff4444;color:#fff;padding:8px 16px;border-radius:6px;cursor:pointer;width:100%">すべてのデータをリセット</button>
+    </div>
+  </div>
+</div>
+
+<!-- Playlist Modal -->
+<div id="playlistModal" class="modal" style="display:none">
+  <div class="modal-content">
+    <div class="modal-close" onclick="closePlaylistModal()">✕</div>
+    <h2 id="playlistTitle">新規プレイリスト</h2>
+    <input type="text" id="playlistName" placeholder="プレイリスト名" style="margin:12px 0">
+    <textarea id="playlistDesc" placeholder="説明（オプション）" style="width:100%;height:60px;padding:8px;background:var(--bg3);border:1px solid var(--line);border-radius:6px;color:var(--fg);margin:8px 0;font-family:inherit"></textarea>
+    <div class="modal-actions">
+      <button onclick="closePlaylistModal()">キャンセル</button>
+      <button onclick="savePlaylist()">保存</button>
+    </div>
+  </div>
+</div>
+
 <script>
 const WORKER_BASE = 'https://dark-sun-c226.c00lkimx01.workers.dev/api/v1';
 const view = document.getElementById('view');
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let history_ = JSON.parse(localStorage.getItem('cukaw_history') || '[]');
 let subs = JSON.parse(localStorage.getItem('cukaw_subs') || '[]');
+let favorites = JSON.parse(localStorage.getItem('cukaw_favorites') || '[]');
+let watchLater = JSON.parse(localStorage.getItem('cukaw_watchlater') || '[]');
+let playlists = JSON.parse(localStorage.getItem('cukaw_playlists') || '[]');
+let settings = JSON.parse(localStorage.getItem('cukaw_settings') || '{"theme":"dark","primaryColor":"#ff0033"}');
 
-const fmtViews = n => { n = Number(n)||0; if (n>=1e8) return (n/1e8).toFixed(1)+'億'; if (n>=1e4) return (n/1e4).toFixed(n>=1e5?0:1)+'万'; return n.toLocaleString(); };
+const COLORS = ['#ff0033','#ff6b00','#ffc300','#00c853','#00b0ff','#7b3fe4','#e91e63','#009688'];
+
+// SVG Icons
+const Icons = {
+  heart: '<svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>',
+  clock: '<svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-5.04-6.71l2.75 3.54 4.96-6.63c.37-.5.09-1.24-.57-1.24-.37 0-.74.2-.95.52L10.5 11.35 8.54 9.03c-.21-.31-.58-.52-.95-.52-.66 0-.94.75-.57 1.24z"/></svg>',
+  list: '<svg viewBox="0 0 24 24"><path d="M15 6H3v2h12V6zm0 4H3v2h12v-2zM3 16h8v-2H3v2zM17 6v8.18c-.31-.11-.65-.18-1-.18-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3V8h3V6h-5z"/></svg>',
+  share: '<svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.15c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.44 9.31 6.77 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.77 0 1.44-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>',
+  more: '<svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>',
+  close: '<svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>',
+  play: '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>',
+};
+
+function saveSettings() { localStorage.setItem('cukaw_settings', JSON.stringify(settings)); }
+function saveFavorites() { localStorage.setItem('cukaw_favorites', JSON.stringify(favorites)); }
+function saveWatchLater() { localStorage.setItem('cukaw_watchlater', JSON.stringify(watchLater)); }
+function savePlaylists() { localStorage.setItem('cukaw_playlists', JSON.stringify(playlists)); }
+
+function changeTheme() {
+  const mode = document.getElementById('themeMode').value;
+  settings.theme = mode;
+  if (mode === 'light') {
+    document.documentElement.style.setProperty('--bg', '#f5f5f5');
+    document.documentElement.style.setProperty('--bg2', '#e0e0e0');
+    document.documentElement.style.setProperty('--bg3', '#d0d0d0');
+    document.documentElement.style.setProperty('--fg', '#212121');
+    document.documentElement.style.setProperty('--muted', '#666');
+    document.documentElement.style.setProperty('--line', '#ccc');
+  } else {
+    document.documentElement.style.setProperty('--bg', '#0f0f0f');
+    document.documentElement.style.setProperty('--bg2', '#272727');
+    document.documentElement.style.setProperty('--bg3', '#3f3f3f');
+    document.documentElement.style.setProperty('--fg', '#f1f1f1');
+    document.documentElement.style.setProperty('--muted', '#aaa');
+    document.documentElement.style.setProperty('--line', '#303030');
+  }
+  saveSettings();
+}
+
+function initColorPicker() {
+  const picker = document.getElementById('colorPicker');
+  picker.innerHTML = COLORS.map(c => `
+    <div class="color-option ${c===settings.primaryColor?'active':''}" style="background:${c}" onclick="changeColor('${c}')"></div>
+  `).join('');
+}
+
+function changeColor(color) {
+  settings.primaryColor = color;
+  document.documentElement.style.setProperty('--red', color);
+  document.querySelectorAll('.color-option').forEach(c => c.classList.remove('active'));
+  document.querySelector(`[style*="${color}"]`).classList.add('active');
+  saveSettings();
+}
+
+function openSettingsModal() {
+  document.getElementById('themeMode').value = settings.theme;
+  initColorPicker();
+  document.getElementById('playSpeed').value = settings.playSpeed || '1';
+  document.getElementById('settingsModal').style.display = 'flex';
+}
+
+function closeSettingsModal() {
+  settings.playSpeed = document.getElementById('playSpeed').value;
+  saveSettings();
+  document.getElementById('settingsModal').style.display = 'none';
+}
+
+function clearAllData() {
+  if (confirm('すべてのデータを削除しますか？')) {
+    localStorage.clear();
+    location.reload();
+  }
+}
+
+function openPlaylistModal(playlistId = null) {
+  if (playlistId !== null) {
+    const pl = playlists.find(p => p.id === playlistId);
+    document.getElementById('playlistTitle').textContent = 'プレイリストを編集';
+    document.getElementById('playlistName').value = pl.name;
+    document.getElementById('playlistDesc').value = pl.description || '';
+    document.getElementById('playlistName').dataset.id = playlistId;
+  } else {
+    document.getElementById('playlistTitle').textContent = '新規プレイリスト';
+    document.getElementById('playlistName').value = '';
+    document.getElementById('playlistDesc').value = '';
+    delete document.getElementById('playlistName').dataset.id;
+  }
+  document.getElementById('playlistModal').style.display = 'flex';
+}
+
+function closePlaylistModal() {
+  document.getElementById('playlistModal').style.display = 'none';
+}
+
+function savePlaylist() {
+  const name = document.getElementById('playlistName').value.trim();
+  const desc = document.getElementById('playlistDesc').value.trim();
+  if (!name) { alert('プレイリスト名を入力してください'); return; }
+  const id = document.getElementById('playlistName').dataset.id;
+  if (id) {
+    const pl = playlists.find(p => p.id === id);
+    pl.name = name;
+    pl.description = desc;
+  } else {
+    playlists.push({ id: Date.now().toString(), name, description: desc, videos: [] });
+  }
+  savePlaylists();
+  closePlaylistModal();
+  route();
+}
+
+function addToPlaylist(videoId) {
+  if (!playlists.length) { alert('プレイリストを作成してください'); return; }
+  const idx = parseInt(prompt(`プレイリストを選択（番号）:\n${playlists.map((p,i) => i+1+'. '+p.name).join('\n')}`)) - 1;
+  if (idx >= 0 && idx < playlists.length && !playlists[idx].videos.includes(videoId)) {
+    playlists[idx].videos.push(videoId);
+    savePlaylists();
+    alert('プレイリストに追加しました');
+  }
+}
+
+const fmtViews = n => { n = Number(n) || 0; if (n >= 1e8) return (n / 1e8).toFixed(1) + '億'; if (n >= 1e4) return (n / 1e4).toFixed(n >= 1e5 ? 0 : 1) + '万'; return n >= 1000 ? (n / 1000).toFixed(0) + 'K' : n.toLocaleString(); };
 const fmtDur = s => { s = Number(s)||0; if (!s) return ''; const h=Math.floor(s/3600), m=Math.floor(s%3600/60), x=s%60; return (h?h+':'+String(m).padStart(2,'0'):m)+':'+String(x).padStart(2,'0'); };
 
 function norm(item) {
   const id = item.videoId || item.id || (item.url ? item.url.replace('/watch?v=','') : null);
+  const author = item.author || item.uploaderName || item.authorName || item.channelName || 'Unknown';
+  const authorId = item.authorId || item.uploaderUrl?.replace('/channel/','') || item.channelId || '';
+  const viewCount = item.viewCount || item.views || item.view_count || 0;
   return {
-    id, title: item.title || '無題の動画',
-    channel: item.author || item.uploaderName || item.authorName || 'Unknown',
-    channelId: item.authorId || item.uploaderUrl?.replace('/channel/','') || '',
-    views: item.viewCount || item.views || 0,
+    id, 
+    title: item.title || '無題の動画',
+    channel: author,
+    channelId: authorId,
+    views: Number(viewCount) || 0,
     published: item.publishedText || item.uploadedDate || '',
     duration: fmtDur(item.lengthSeconds || item.duration),
-    thumbnail: item.thumbnail || item.videoThumbnails?.[0]?.url || `https://i.ytimg.com/vi/${id}/hqdefault.jpg`,
-    channelThumb: item.authorThumbnails?.[0]?.url || ''
+    thumbnail: `https://i.ytimg.com/vi/${id}/hqdefault.jpg`,
+    isShort: item.isShort || false
   };
 }
 
@@ -191,41 +462,19 @@ function pickCont(data) {
   return data.continuation || data.nextpage || data.nextPage || data.nextPageToken || null;
 }
 
-// Fetches one page; returns { videos, channels, cont }
 async function fetchPage(path, cont) {
   let p = path;
   if (cont) p += (p.includes('?') ? '&' : '?') + 'continuation=' + encodeURIComponent(cont);
   const data = await api(p);
   const raw = pickList(data);
   const videos = raw.filter(i => !i.type || i.type === 'video' || i.type === 'stream').map(norm).filter(v => v.id);
+  const shorts = raw.filter(i => i.type === 'short' || i.isShort).map(norm).filter(v => v.id);
   const channels = raw.filter(i => i.type === 'channel').map(normChannel).filter(c => c.id);
-  // Some search providers return only videos. Surface the matching creators as
-  // channel results too, rather than hiding the entire channel section.
-  if (path.startsWith('/search') && !cont && !channels.length) {
-    const query = new URL(path, location.origin).searchParams.get('q')?.trim().toLocaleLowerCase() || '';
-    const candidates = new Map();
-    for (const item of raw) {
-      const id = item.authorId || item.channelId;
-      if (!id || candidates.has(id)) continue;
-      const name = item.author || item.uploaderName || '';
-      candidates.set(id, { id, name, thumb: item.authorThumbnails?.[0]?.url || '', subs: null, videoCount: null, description: '' });
-    }
-    const matches = [...candidates.values()].filter(c => c.name.toLocaleLowerCase().includes(query));
-    const selected = (matches.length ? matches : [...candidates.values()].slice(0, 1)).slice(0, 3);
-    const enriched = await Promise.all(selected.map(async c => {
-      try {
-        const detail = await api('/channels/' + encodeURIComponent(c.id));
-        return { ...c, ...normChannel(detail), id: c.id };
-      } catch { return c; }
-    }));
-    channels.push(...enriched);
-  }
-  return { videos, channels, cont: pickCont(data) };
+  return { videos, shorts, channels, cont: pickCont(data) };
 }
 
-// Generic infinite scroll controller
-function makeFeed({ path, container, sentinel, renderVideos, renderChannels, emptyText }) {
-  let cont = null, loading = false, done = false, first = true, seen = new Set(), seenChannels = new Set();
+function makeFeed({ path, container, sentinel, renderVideos, renderShorts, renderChannels, emptyText }) {
+  let cont = null, loading = false, done = false, first = true, seen = new Set();
   let curPath = path;
   const spin = () => { sentinel.innerHTML = '<div class="spinner" style="margin:24px auto"></div>'; };
   const clearSpin = () => { sentinel.innerHTML = ''; };
@@ -235,19 +484,17 @@ function makeFeed({ path, container, sentinel, renderVideos, renderChannels, emp
     loading = true; spin();
     try {
       const page = await fetchPage(curPath, cont);
-      const fresh = page.videos.filter(v => !seen.has(v.id));
-      fresh.forEach(v => seen.add(v.id));
-      if (renderChannels && page.channels.length) {
-        const freshChannels = page.channels.filter(c => !seenChannels.has(c.id));
-        freshChannels.forEach(c => seenChannels.add(c.id));
-        if (freshChannels.length) renderChannels(freshChannels);
-      }
-      if (fresh.length) renderVideos(fresh);
+      const freshVideos = page.videos.filter(v => !seen.has(v.id));
+      const freshShorts = page.shorts.filter(v => !seen.has(v.id));
+      freshVideos.forEach(v => seen.add(v.id));
+      freshShorts.forEach(v => seen.add(v.id));
+      if (first && page.channels.length && renderChannels) renderChannels(page.channels);
+      if (freshVideos.length) renderVideos(freshVideos);
+      if (freshShorts.length && renderShorts) renderShorts(freshShorts);
       cont = page.cont;
-      // /trending は continuation を返さないため、検索APIに切り替えて続きを読み込む
       if (!cont && curPath.startsWith('/trending')) { curPath = '/search?q=' + encodeURIComponent('おすすめ'); cont = null; }
-      else if (!cont || (!fresh.length && !first)) done = true;
-      if (first && !fresh.length && !page.channels.length) {
+      else if (!cont || (!freshVideos.length && !freshShorts.length && !first)) done = true;
+      if (first && !freshVideos.length && !freshShorts.length && !page.channels.length) {
         container.innerHTML = `<div class="status">${emptyText || '結果がありません'}</div>`;
       }
       first = false;
@@ -278,15 +525,95 @@ function makeFeed({ path, container, sentinel, renderVideos, renderChannels, emp
 let feedCleanups = [];
 function resetFeeds() { feedCleanups.forEach(f => f()); feedCleanups = []; }
 
-const CHIPS = ['すべて','音楽','ゲーム','ライブ','アニメ','料理','プログラミング','ニュース','Vlog'];
+const CHIPS = ['おすすめ','音楽','ゲーム','ライブ','アニメ','料理','プログラミング','ニュース','Vlog'];
 function renderHome() {
   resetFeeds();
   view.innerHTML = `<div class="chips">${CHIPS.map((c,i)=>`<button class="chip ${i===0?'active':''}" data-c="${c}">${c}</button>`).join('')}</div><div id="g"></div><div id="sentinel"></div>`;
   view.querySelectorAll('.chip').forEach(b => b.onclick = () => {
     view.querySelectorAll('.chip').forEach(x=>x.classList.remove('active')); b.classList.add('active');
-    startGrid(b.dataset.c === 'すべて' ? '/trending' : '/search?q=' + encodeURIComponent(b.dataset.c));
+    if (b.dataset.c === 'おすすめ') {
+      renderHomeFeed();
+    } else {
+      startGrid('/search?q=' + encodeURIComponent(b.dataset.c));
+    }
   });
-  startGrid('/trending');
+  renderHomeFeed();
+}
+
+async function renderHomeFeed() {
+  resetFeeds();
+  const g = document.getElementById('g');
+  const sentinel = document.getElementById('sentinel');
+  g.innerHTML = '';
+  
+  // 登録チャンネルの最新動画を取得
+  if (subs.length > 0) {
+    g.innerHTML += '<div class="search-section"><h3>登録チャンネルの最新動画</h3><div class="grid" id="subsGrid"></div></div>';
+    try {
+      const subsVideos = [];
+      for (const id of subs.slice(0, 5)) {
+        try {
+          const d = await api(`/channels/${id}`);
+          const vids = (d.latestVideos || []).filter(i => !i.type || i.type === 'video').map(norm).filter(v => v.id).slice(0, 2);
+          subsVideos.push(...vids);
+        } catch(e) {}
+      }
+      if (subsVideos.length > 0) {
+        document.getElementById('subsGrid').innerHTML = subsVideos.slice(0, 6).map(card).join('');
+      }
+    } catch(e) { }
+  }
+  
+  // 最も長く見た動画の関連動画を取得
+  if (history_.length > 0) {
+    const topVideo = history_[0];
+    g.innerHTML += '<div class="search-section"><h3>関連動画</h3><div class="grid" id="relatedGrid"></div></div>';
+    try {
+      const d = await api('/videos/' + topVideo.id);
+      const rel = (d.recommendedVideos || []).map(norm).filter(x=>x.id).slice(0, 12);
+      if (rel.length > 0) {
+        document.getElementById('relatedGrid').innerHTML = rel.map(card).join('');
+      }
+    } catch(e) {}
+  }
+  
+  // トレンド動画
+  g.innerHTML += '<div class="search-section"><h3>トレンド</h3><div class="grid" id="trendGrid"></div></div>';
+  const trendGrid = g.querySelector('#trendGrid');
+  
+  let cont = null, loading = false, done = false, first = true, seen = new Set();
+  
+  async function load() {
+    if (loading || done) return;
+    loading = true;
+    try {
+      let p = '/trending';
+      if (cont) p += '?continuation=' + encodeURIComponent(cont);
+      const data = await api(p);
+      const raw = pickList(data);
+      const videos = raw.filter(i => !i.type || i.type === 'video').map(norm).filter(v => v.id && !seen.has(v.id));
+      videos.forEach(v => seen.add(v.id));
+      if (videos.length) trendGrid.insertAdjacentHTML('beforeend', videos.map(card).join(''));
+      cont = pickCont(data);
+      if (!cont) done = true;
+      first = false;
+    } catch(e) {
+      done = true;
+    }
+    loading = false;
+  }
+
+  function check() {
+    if (done || loading) return;
+    const r = sentinel.getBoundingClientRect();
+    if (r.top < window.innerHeight + 600) load();
+  }
+
+  const onScroll = () => check();
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  feedCleanups.push(() => { window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onScroll); });
+  load();
 }
 
 function startGrid(path) {
@@ -305,6 +632,7 @@ function startGrid(path) {
 const card = v => `
   <div class="card" onclick="location.hash='#/watch?v=${v.id}'">
     <div class="thumb"><img src="${esc(v.thumbnail)}" alt="" loading="lazy">${v.duration ? `<span class="dur">${v.duration}</span>` : ''}</div>
+    <button class="card-action" onclick="event.stopPropagation(); addToWatchLater('${v.id}'); this.textContent='✓'">${Icons.more}</button>
     <div class="meta">
       <div class="ch-av">${esc((v.channel||'?')[0])}</div>
       <div>
@@ -315,15 +643,45 @@ const card = v => `
     </div>
   </div>`;
 
-const row = v => `
-  <div class="row" onclick="location.hash='#/watch?v=${v.id}'">
+const searchCard = v => `
+  <div class="card" onclick="location.hash='#/watch?v=${v.id}'">
     <div class="thumb"><img src="${esc(v.thumbnail)}" alt="" loading="lazy">${v.duration ? `<span class="dur">${v.duration}</span>` : ''}</div>
-    <div>
-      <div class="title">${esc(v.title)}</div>
-      <div class="sub">${fmtViews(v.views)} 回視聴 ${esc(v.published)}</div>
-      <div class="sub">${v.channelId ? `<a href="#/channel?id=${v.channelId}" onclick="event.stopPropagation()">${esc(v.channel)}</a>` : esc(v.channel)}</div>
+    <button class="card-action" onclick="event.stopPropagation(); addToWatchLater('${v.id}')">${Icons.more}</button>
+    <div class="meta">
+      <div class="ch-av">${esc((v.channel||'?')[0])}</div>
+      <div>
+        <div class="title">${esc(v.title)}</div>
+        <div class="sub">${v.channelId ? `<a href="#/channel?id=${v.channelId}" onclick="event.stopPropagation()">${esc(v.channel)}</a>` : esc(v.channel)}</div>
+        <div class="sub">${fmtViews(v.views)} 回視聴 ${esc(v.published)}</div>
+      </div>
     </div>
   </div>`;
+
+const shortCard = v => `
+  <div class="short-card" onclick="location.hash='#/watch?v=${v.id}'">
+    <div class="thumb"><img src="${esc(v.thumbnail)}" alt="" loading="lazy"/><div style="position:absolute;inset:0;display:grid;place-items:center;background:rgba(0,0,0,0.2)">${Icons.play}</div></div>
+    <button class="card-action" onclick="event.stopPropagation(); addToWatchLater('${v.id}')">${Icons.more}</button>
+    <div class="short-meta">
+      <div style="flex:1;min-width:0">
+        <div class="short-title">${esc(v.title)}</div>
+        <div class="short-sub">${esc(v.channel)}</div>
+      </div>
+    </div>
+  </div>`;
+
+function addToFavorites(videoId) {
+  if (!favorites.includes(videoId)) {
+    favorites.push(videoId);
+    saveFavorites();
+  }
+}
+
+function addToWatchLater(videoId) {
+  if (!watchLater.includes(videoId)) {
+    watchLater.push(videoId);
+    saveWatchLater();
+  }
+}
 
 const rel = v => `
   <div class="rel" onclick="location.hash='#/watch?v=${v.id}'">
@@ -336,33 +694,62 @@ const rel = v => `
   </div>`;
 
 const chRow = c => `
-  <div class="ch-row" onclick="location.hash='#/channel?id=${encodeURIComponent(c.id)}'">
+  <div class="ch-row" onclick="location.hash='#/channel?id=${c.id}'">
     ${c.thumb ? `<img class="ch-pic" src="${esc(c.thumb)}" alt="" loading="lazy">` : `<div class="ch-pic">${esc((c.name||'?')[0])}</div>`}
-    <div class="ch-row-info">
+    <div>
       <h3>${esc(c.name)}</h3>
       <div class="sub">${c.subs != null ? 'チャンネル登録者数 ' + fmtViews(c.subs) + '人' : ''}${c.videoCount != null ? ' • ' + fmtViews(c.videoCount) + ' 本の動画' : ''}</div>
-      ${c.description ? `<div class="sub ch-description">${esc(c.description)}</div>` : ''}
+      ${c.description ? `<div class="sub" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;max-width:640px">${esc(c.description)}</div>` : ''}
+    </div>
+  </div>`;
+
+const channelCard = c => `
+  <div class="channel-card" onclick="location.hash='#/channel?id=${c.id}'">
+    ${c.thumb ? `<img class="ch-pic" src="${esc(c.thumb)}" alt="" loading="lazy">` : `<div class="ch-pic">${esc((c.name||'?')[0])}</div>`}
+    <div class="channel-card-info">
+      <h4>${esc(c.name)}</h4>
+      <div class="sub">${c.subs != null ? fmtViews(c.subs) + ' 人' : ''}${c.videoCount != null ? ' • ' + fmtViews(c.videoCount) + ' 本' : ''}</div>
+      ${c.description ? `<div class="sub" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${esc(c.description)}</div>` : ''}
     </div>
   </div>`;
 
 function renderResults(q) {
   resetFeeds();
   document.getElementById('q').value = q;
-  view.innerHTML = `<div id="chBox"></div><div class="list" id="resList"></div><div id="sentinel"></div>`;
-  const list = document.getElementById('resList');
+  view.innerHTML = `<div id="chBox"></div><div id="shortsBox"></div><div id="videosBox"></div><div id="sentinel" style="height:1px"></div>`;
+  
+  let channelsShown = false, shortsShown = false;
+  const sentinel = document.getElementById('sentinel');
   const chBox = document.getElementById('chBox');
-  const shownChannels = new Set();
+  const shortsBox = document.getElementById('shortsBox');
+  const videosBox = document.getElementById('videosBox');
+  
   makeFeed({
     path: '/search?q=' + encodeURIComponent(q),
     container: view,
-    sentinel: document.getElementById('sentinel'),
-    renderVideos: vs => list.insertAdjacentHTML('beforeend', vs.map(row).join('')),
+    sentinel: sentinel,
+    renderVideos: vs => {
+      if (!videosBox.querySelector('.search-grid')) {
+        videosBox.innerHTML = '<div class="search-section"><h3>動画</h3><div class="search-grid" id="videoGrid"></div></div>';
+      }
+      if (document.getElementById('videoGrid')) {
+        document.getElementById('videoGrid').insertAdjacentHTML('beforeend', vs.map(searchCard).join(''));
+      }
+    },
+    renderShorts: ss => {
+      if (!shortsShown && ss.length > 0) {
+        shortsBox.innerHTML = '<div class="search-section"><h3>ショート</h3><div class="short-grid" id="shortGrid"></div></div>';
+        shortsShown = true;
+      }
+      if (document.getElementById('shortGrid')) {
+        document.getElementById('shortGrid').insertAdjacentHTML('beforeend', ss.map(shortCard).join(''));
+      }
+    },
     renderChannels: cs => {
-      const fresh = cs.filter(c => !shownChannels.has(c.id));
-      fresh.forEach(c => shownChannels.add(c.id));
-      if (!fresh.length) return;
-      if (!chBox.firstElementChild) chBox.innerHTML = '<div class="ch-results"></div>';
-      chBox.firstElementChild.insertAdjacentHTML('beforeend', fresh.map(chRow).join(''));
+      if (!channelsShown && cs.length > 0) {
+        chBox.innerHTML = `<div class="search-section"><h3>チャンネル</h3><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-bottom:24px">${cs.map(channelCard).join('')}</div></div><hr class="divider" style="margin-bottom:24px">`;
+        channelsShown = true;
+      }
     },
     emptyText: `「${esc(q)}」の検索結果はありません`
   });
@@ -429,16 +816,87 @@ function renderHistory() {
   view.innerHTML = history_.length ? `<h2 style="font-size:28px;margin:24px 0 8px">履歴</h2><div class="list">${history_.map(row).join('')}</div>` : '<div class="status">再生履歴はありません</div>';
 }
 
+function renderFavorites() {
+  resetFeeds();
+  if (!favorites.length) { view.innerHTML = '<div class="status">お気に入りはありません</div>'; return; }
+  view.innerHTML = `<h2 style="font-size:28px;margin:24px 0 8px">お気に入り</h2><div class="list">${favorites.map(id => {
+    const h = history_.find(v => v.id === id);
+    return h ? row(h) : '';
+  }).join('')}</div>`;
+}
+
+function renderWatchLater() {
+  resetFeeds();
+  if (!watchLater.length) { view.innerHTML = '<div class="status">後で見る動画はありません</div>'; return; }
+  view.innerHTML = `<h2 style="font-size:28px;margin:24px 0 8px">後で見る</h2><div class="list">${watchLater.map(id => {
+    const h = history_.find(v => v.id === id);
+    return h ? row(h) : '';
+  }).join('')}</div>`;
+}
+
+function renderPlaylists() {
+  resetFeeds();
+  view.innerHTML = `<h2 style="font-size:28px;margin:24px 0 8px">プレイリスト</h2>
+    <button onclick="openPlaylistModal()" style="background:var(--fg);color:#0f0f0f;padding:10px 20px;border-radius:6px;cursor:pointer;font-weight:500;margin-bottom:16px">新規プレイリスト</button>
+    ${playlists.length ? `<div class="list">${playlists.map(p => `
+      <div style="background:var(--bg2);border-radius:8px;padding:16px;display:flex;justify-content:space-between;align-items:center">
+        <div onclick="location.hash='#/playlist?id=${p.id}'" style="cursor:pointer;flex:1">
+          <h3>${esc(p.name)}</h3>
+          <div class="sub">${p.videos.length} 本の動画</div>
+          ${p.description ? `<div class="sub">${esc(p.description)}</div>` : ''}
+        </div>
+        <button onclick="event.stopPropagation(); openPlaylistModal('${p.id}')" style="background:var(--bg3);padding:6px 12px;border-radius:4px;cursor:pointer">編集</button>
+        <button onclick="event.stopPropagation(); playlists=playlists.filter(x=>x.id!=='${p.id}'); savePlaylists(); renderPlaylists()" style="background:#ff4444;color:#fff;padding:6px 12px;border-radius:4px;cursor:pointer;margin-left:8px">削除</button>
+      </div>
+    `).join('')}</div>` : '<div class="status">プレイリストがありません</div>'}`;
+}
+
+async function renderPlaylist(id) {
+  resetFeeds();
+  const pl = playlists.find(p => p.id === id);
+  if (!pl) { view.innerHTML = '<div class="status">プレイリストが見つかりません</div>'; return; }
+  view.innerHTML = `<h2 style="font-size:28px;margin:24px 0 8px">${esc(pl.name)}</h2>
+    <div class="list">${pl.videos.map(vid => {
+      const h = history_.find(v => v.id === vid);
+      return h ? `${row(h)}<button onclick="event.stopPropagation(); pl.videos=pl.videos.filter(x=>x!=='${vid}'); savePlaylists(); renderPlaylist('${id}')" style="background:#ff4444;color:#fff;padding:6px 12px;border-radius:4px;cursor:pointer">削除</button>` : '';
+    }).join('')}</div>`;
+}
+
+const row = v => `
+  <div class="row" onclick="location.hash='#/watch?v=${v.id}'">
+    <div class="thumb"><img src="${esc(v.thumbnail)}" alt="" loading="lazy">${v.duration ? `<span class="dur">${v.duration}</span>` : ''}</div>
+    <div>
+      <div class="title">${esc(v.title)}</div>
+      <div class="sub">${fmtViews(v.views)} 回視聴 ${esc(v.published)}</div>
+      <div class="sub">${v.channelId ? `<a href="#/channel?id=${v.channelId}" onclick="event.stopPropagation()">${esc(v.channel)}</a>` : esc(v.channel)}</div>
+    </div>
+  </div>`;
+
 async function renderWatch(id) {
   resetFeeds();
   window.scrollTo(0,0);
   view.innerHTML = `<div class="watch">
     <div class="primary">
-      <div class="player"><iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>
+      <div class="player"><iframe id="player" src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>
+      <div class="player-controls">
+        <div class="player-control">
+          <label>速度:</label>
+          <select onchange="updatePlayerSpeed(this.value)">
+            <option value="0.75" ${settings.playSpeed==='0.75'?'selected':''}>0.75x</option>
+            <option value="1" ${settings.playSpeed==='1'?'selected':''}>1x</option>
+            <option value="1.25" ${settings.playSpeed==='1.25'?'selected':''}>1.25x</option>
+            <option value="1.5" ${settings.playSpeed==='1.5'?'selected':''}>1.5x</option>
+            <option value="2" ${settings.playSpeed==='2'?'selected':''}>2x</option>
+          </select>
+        </div>
+        <button class="pill" onclick="addToFavorites('${id}'); alert('お気に入りに追加しました')">${Icons.heart} お気に入り</button>
+        <button class="pill" onclick="addToWatchLater('${id}'); alert('後で見るに追加しました')">${Icons.clock} 後で見る</button>
+        <button class="pill" onclick="addToPlaylist('${id}')">${Icons.list} プレイリスト</button>
+      </div>
       <h1 class="w-title" id="wt">読み込み中...</h1>
       <div class="owner"><div class="owner-l"><div class="ch-av" id="wav">?</div><div><div style="font-weight:500;font-size:16px" id="wch"></div><div class="sub" style="font-size:12px;margin:0" id="wsubs"></div></div>
         <button class="subscribe" id="subBtn">チャンネル登録</button></div>
-        <div style="display:flex;gap:8px"><span class="pill" id="wlikes">👍</span><button class="pill" onclick="navigator.clipboard.writeText('https://youtu.be/${id}')">↗ 共有</button></div></div>
+        <div style="display:flex;gap:8px"><span class="pill" id="wlikes">${Icons.heart}</span><button class="pill" onclick="navigator.clipboard.writeText('https://youtu.be/${id}')">${Icons.share} 共有</button></div></div>
       <div class="desc" id="desc" onclick="this.classList.toggle('open')"><b id="wmeta"></b><p id="wdesc"></p></div>
       <div class="comments"><h3 id="ccount">コメント</h3><div id="clist"><div class="spinner" style="margin:20px auto"></div></div></div>
     </div>
@@ -452,7 +910,7 @@ async function renderWatch(id) {
     wt.textContent = v.title; wav.textContent = v.channel[0];
     wch.innerHTML = v.channelId ? `<a href="#/channel?id=${v.channelId}">${esc(v.channel)}</a>` : esc(v.channel);
     wsubs.textContent = d.subCountText ? 'チャンネル登録者数 ' + d.subCountText : '';
-    wlikes.textContent = '👍 ' + fmtViews(d.likeCount);
+    wlikes.innerHTML = `${Icons.heart} ` + fmtViews(d.likeCount);
     wmeta.textContent = `${fmtViews(v.views)} 回視聴 ${v.published||''}`;
     wdesc.textContent = d.description || '概要はありません。';
     const sb = document.getElementById('subBtn');
@@ -472,8 +930,13 @@ async function renderWatch(id) {
     const c = await api('/comments/' + id);
     const list = c.comments || (Array.isArray(c) ? c : []);
     ccount.textContent = `${(c.commentCount || list.length).toLocaleString()} 件のコメント`;
-    clist.innerHTML = list.length ? list.map(x => `<div class="cm"><img src="${esc(x.authorThumbnails?.[0]?.url||'')}" alt=""><div><b>${esc(x.author||'匿名')}</b><span>${esc(x.publishedText||'')}</span><p>${esc(x.content||'')}</p>${x.likeCount?`<div class="sub" style="font-size:12px">👍 ${fmtViews(x.likeCount)}</div>`:''}</div></div>`).join('') : '<div class="sub">コメントはありません</div>';
+    clist.innerHTML = list.length ? list.map(x => `<div class="cm"><img src="${esc(x.authorThumbnails?.[0]?.url||'')}" alt=""><div><b>${esc(x.author||'匿名')}</b><span>${esc(x.publishedText||'')}</span><p>${esc(x.content||'')}</p>${x.likeCount?`<div class="sub" style="font-size:12px">${Icons.heart} ${fmtViews(x.likeCount)}</div>`:''}</div></div>`).join('') : '<div class="sub">コメントはありません</div>';
   } catch(e) { clist.innerHTML = '<div class="sub">コメントを取得できませんでした</div>'; }
+}
+
+function updatePlayerSpeed(speed) {
+  settings.playSpeed = speed;
+  saveSettings();
 }
 
 function route() {
@@ -484,12 +947,22 @@ function route() {
   if (path === '/watch' && p.get('v')) return renderWatch(p.get('v'));
   if (path === '/results' && p.get('q')) return renderResults(p.get('q'));
   if (path === '/channel' && p.get('id')) return renderChannel(p.get('id'), p.get('tab') || 'videos', p.get('sort') || 'latest');
+  if (path === '/playlist' && p.get('id')) return renderPlaylist(p.get('id'));
   if (path === '/history') return renderHistory();
+  if (path === '/favorites') return renderFavorites();
+  if (path === '/watchlater') return renderWatchLater();
+  if (path === '/playlists') return renderPlaylists();
   if (path === '/subs') return renderSubs();
   renderHome();
 }
+
 document.getElementById('searchForm').onsubmit = e => { e.preventDefault(); const q = document.getElementById('q').value.trim(); if (q) location.hash = '#/results?q=' + encodeURIComponent(q); };
 window.addEventListener('hashchange', route);
+window.addEventListener('keydown', e => {
+  if (e.key === '/' && e.target === document.body) { e.preventDefault(); document.getElementById('q').focus(); }
+});
+document.documentElement.style.setProperty('--red', settings.primaryColor);
+if (settings.theme === 'light') changeTheme();
 route();
 </script>
 </body>
